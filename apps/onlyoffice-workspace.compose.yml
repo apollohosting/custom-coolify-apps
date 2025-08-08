@@ -1,0 +1,153 @@
+# slogan: Onlyoffice Workspace is a feature rich office 360 alternative.
+
+# NOTE: Add $STORAGE_PATH to project before load.
+
+services:
+  mysql:
+    container_name: onlyoffice-mysql
+    image: mysql:latest
+    stdin_open: true
+    tty: true
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $SERVICE_PASSWORD_ROOTMYSQL
+      MYSQL_USER: $SERVICE_USER_MYSQL
+      MYSQL_PASSWORD: $SERVICE_PASSWORD_MYSQL
+    volumes:
+      - mysql-data:/var/lib/mysql:rw
+
+
+  community-server:
+    container_name: onlyoffice-community-server
+    image: onlyoffice/communityserver:12.6.0.1900
+    stdin_open: true
+    tty: true
+    restart: always
+    privileged: true
+    cgroup: host
+    environment:
+      - SERVICE_FQDN_COMMUNITY_SERVER_80
+      - ONLYOFFICE_CORE_MACHINEKEY=${SERVICE_BASE64_COREMACHINEKEY}
+      - CONTROL_PANEL_PORT_80_TCP=80
+      - CONTROL_PANEL_PORT_80_TCP_ADDR=onlyoffice-control-panel
+      - DOCUMENT_SERVER_PORT_80_TCP_ADDR=onlyoffice-document-server
+      - DOCUMENT_SERVER_JWT_ENABLED=true
+      - DOCUMENT_SERVER_JWT_SECRET=${SERVICE_BASE64_DOCUMENTSERVER}
+      - DOCUMENT_SERVER_JWT_HEADER=AuthorizationJwt
+      - MYSQL_SERVER_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_SERVER_DB_NAME=onlyoffice_communityserver
+      - MYSQL_SERVER_HOST=onlyoffice-mysql
+      - MYSQL_SERVER_USER=${SERVICE_USER_MYSQL}
+      - MYSQL_SERVER_PASS=${SERVICE_PASSWORD_MYSQL}
+      - MAIL_SERVER_API_PORT=8081
+      - MAIL_SERVER_API_HOST=mail-server
+      - MAIL_SERVER_DB_HOST=onlyoffice-mysql
+      - MAIL_SERVER_DB_PORT=3306
+      - MAIL_SERVER_DB_NAME=onlyoffice_mailserver
+      - MAIL_SERVER_DB_USER=${SERVICE_USER_MYSQL}
+      - MAIL_SERVER_DB_PASS=${SERVICE_PASSWORD_MYSQL}
+      - ELASTICSEARCH_SERVER_HOST=onlyoffice-elasticsearch
+      - ELASTICSEARCH_SERVER_HTTPPORT=9200
+    volumes:
+      - community-data:/var/www/onlyoffice/Data:rw
+      - community-letsencrypt:/etc/letsencrypt:rw
+      - document-data:/var/www/onlyoffice/DocumentServerData:rw
+      - community-certs:/var/www/onlyoffice/Data/certs:rw
+      - '/$${project.STORAGE_PATH}/logs/onlyoffice-community-server:/var/log/onlyoffice:rw'
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+
+
+  elastic-search:
+    image: onlyoffice/elasticsearch:7.16.3
+    container_name: onlyoffice-elasticsearch
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65535
+        hard: 65535
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g -Dlog4j2.formatMsgNoLookups=true"
+      - "indices.fielddata.cache.size=30%"
+      - "indices.memory.index_buffer_size=30%" 
+      - "ingest.geoip.downloader.enabled=false"  
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data:rw
+    # expose:
+    #   - "9200"
+    #   - "9300"
+
+
+  document-server:
+    container_name: onlyoffice-document-server
+    image: onlyoffice/documentserver:8.1
+    stdin_open: true
+    tty: true
+    restart: always
+    environment:
+      - SERVICE_FQDN_DOCUMENT_SERVER_80
+      - JWT_ENABLED=true
+      - JWT_SECRET=${SERVICE_BASE64_DOCUMENTSERVER}
+      - JWT_HEADER=AuthorizationJwt
+    volumes:
+      - document-data:/var/www/onlyoffice/Data:rw
+      - document-custom-fonts:/usr/share/fonts/truetype/custom:rw
+      - document-forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten:rw
+      - '/$${project.STORAGE_PATH}/logs/onlyoffice-document-server:/var/log/onlyoffice:rw'
+
+
+  mail-server:
+    container_name: onlyoffice-mail-server
+    image: onlyoffice/mailserver:1.6.75
+    hostname: $SERVICE_URL_MAILSERVER
+    environment:
+      - _MAIL_URL=$SERVICE_URL_MAILSERVER
+      - MYSQL_SERVER=onlyoffice-mysql
+      - MYSQL_SERVER_PORT=3306
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_SERVER_DB_NAME=onlyoffice_mailserver
+    restart: always
+    privileged: true
+    ports: 
+      - 25:25 # SMTP
+      - 143:143 # IMAP STARTTLS
+      - 587:587 # SMTP STARTTLS	
+      - 995:995 # POP3
+    stdin_open: true
+    tty: true
+    volumes:
+      - mail-data:/var/vmail:rw
+      - mail-certs:/etc/pki/tls/mailserver:rw
+      - '/$${project.STORAGE_PATH}/logs/mail:/var/log/onlyoffice:rw'
+
+  control-panel:
+    container_name: onlyoffice-control-panel
+    image: onlyoffice/controlpanel:3.5.2.530
+    environment:
+      - ONLYOFFICE_CORE_MACHINEKEY=${SERVICE_BASE64_COREMACHINEKEY}
+    restart: always
+    volumes:
+      - controlpanel-data:/var/www/onlyoffice/Data:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+      - '/$${project.STORAGE_PATH}/logs/onlyoffice-control-panel:/var/log/onlyoffice:rw'
+    stdin_open: true
+    tty: true
+
+
+volumes:
+  mail-data: null
+  mail-certs: null
+  community-certs: null
+  document-data: null
+  document-forgotten: null
+  document-custom-fonts: null
+  community-data: null
+  community-letsencrypt: null
+  controlpanel-data: null
+  mysql-data: null
+  elasticsearch-data: null
