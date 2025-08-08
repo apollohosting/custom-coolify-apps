@@ -1,0 +1,14 @@
+services:
+  sonarr:
+    image: linuxserver/sonarr:latest
+    environment:
+      - SERVICE_FQDN_SONARR_8989
+      # - _APP_URL=$SERVICE_FQDN_SONARR
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - sonarr-config:/config
+      - '/${project.STORAGE_PATH}/Media/TV Shows:/tv:rw'
+      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+    restart: unless-stopped

@@ -1,0 +1,11 @@
+services:
+  filebrowser:
+    user: 1000:1000
+    image: filebrowser/filebrowser:latest
+    environment:
+      - SERVICE_FQDN_FILEBROWSER_80
+    volumes:
+      - '/${project.STORAGE_PATH}:/srv:rw'
+      - filebrowser-db:/database
+      - filebrowser-config:/config
+    restart: unless-stopped

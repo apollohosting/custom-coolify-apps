@@ -1,62 +1,12 @@
-# slogan: Manage and view your media libraries with Jellyfin and other apps.
 # Add $STORAGE_PATH to project before load.
 
+include:
+  - ../apps/jellyfin.compose.yml
+  - ../apps/lidarr.compose.yml
+  - ../apps/radarr.compose.yml
+  - ../apps/sonarr.compose.yml
+
 services:
-  jellyfin:
-    image: linuxserver/jellyfin:latest
-    environment:
-      - SERVICE_FQDN_JELLYFIN_8096
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - JELLYFIN_PublishedServerUrl=$SERVICE_URL_JELLYFIN
-    volumes:
-      - jellyfin-config:/config
-      - '/${project.STORAGE_PATH}/Media:/data:rw'
-    restart: unless-stopped
-
-  sonarr:
-    image: linuxserver/sonarr:latest
-    environment:
-      - SERVICE_FQDN_SONARR_8989
-      # - _APP_URL=$SERVICE_FQDN_SONARR
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-    volumes:
-      - media-sonarr-config:/config
-      - '/${project.STORAGE_PATH}/Media/TV Shows:/tv:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
-    restart: unless-stopped
-
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    environment:
-      - SERVICE_FQDN_RADARR_7878
-      # - _APP_URL=$SERVICE_FQDN_RADARR
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-    volumes:
-      - media-radarr-config:/config
-      - '/${project.STORAGE_PATH}/Media/Movies:/movies:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
-    restart: unless-stopped
-
-  lidarr:
-    image: 'lscr.io/linuxserver/lidarr:latest'
-    environment:
-      - SERVICE_FQDN_LIDARR_8686
-      # - _APP_URL=$SERVICE_FQDN_LIDARR
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-    volumes:
-      - media-lidarr-config:/config:rw
-      - '/${project.STORAGE_PATH}/Media/Music:/music:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
-    restart: unless-stopped
-
   filebrowser:
     user: 1000:1000
     image: filebrowser/filebrowser:latest
@@ -67,6 +17,58 @@ services:
       - media-filebrowser-db:/database
       - media-filebrowser-config:/config
     restart: unless-stopped
+    
+  # jellyfin:
+  #   image: linuxserver/jellyfin:latest
+  #   environment:
+  #     - SERVICE_FQDN_JELLYFIN_8096
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/London
+  #     - JELLYFIN_PublishedServerUrl=$SERVICE_URL_JELLYFIN
+  #   volumes:
+  #     - jellyfin-config:/config
+  #     - '/${project.STORAGE_PATH}/Media:/data:rw'
+  #   restart: unless-stopped
+
+  # sonarr:
+  #   image: linuxserver/sonarr:latest
+  #   environment:
+  #     - SERVICE_FQDN_SONARR_8989
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/London
+  #   volumes:
+  #     - media-sonarr-config:/config
+  #     - '/${project.STORAGE_PATH}/Media/TV Shows:/tv:rw'
+  #     - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+  #   restart: unless-stopped
+
+  # radarr:
+  #   image: lscr.io/linuxserver/radarr:latest
+  #   environment:
+  #     - SERVICE_FQDN_RADARR_7878
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/London
+  #   volumes:
+  #     - media-radarr-config:/config
+  #     - '/${project.STORAGE_PATH}/Media/Movies:/movies:rw'
+  #     - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+  #   restart: unless-stopped
+
+  # lidarr:
+  #   image: 'lscr.io/linuxserver/lidarr:latest'
+  #   environment:
+  #     - SERVICE_FQDN_LIDARR_8686
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Europe/London
+  #   volumes:
+  #     - media-lidarr-config:/config:rw
+  #     - '/${project.STORAGE_PATH}/Media/Music:/music:rw'
+  #     - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+  #   restart: unless-stopped
 
 volumes:
   media-jellyfin-config: null
