@@ -13,11 +13,11 @@ services:
     environment:
       - SERVICE_FQDN_FILEBROWSER_80
     volumes:
-      - '/${project.STORAGE_PATH}/Media:/srv:rw'
+      - '/$${project.STORAGE_PATH}/Media:/srv:rw'
       - media-filebrowser-db:/database
       - media-filebrowser-config:/config
     restart: unless-stopped
-    
+
   # jellyfin:
   #   image: linuxserver/jellyfin:latest
   #   environment:
