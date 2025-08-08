@@ -1,11 +1,5 @@
 # Add $STORAGE_PATH to project before load.
 
-include:
-  - ../apps/jellyfin.compose.yml
-  - ../apps/lidarr.compose.yml
-  - ../apps/radarr.compose.yml
-  - ../apps/sonarr.compose.yml
-
 services:
   jellyfin:
     image: linuxserver/jellyfin:latest
