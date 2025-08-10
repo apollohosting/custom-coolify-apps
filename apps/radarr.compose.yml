@@ -9,6 +9,9 @@ services:
       - TZ=Europe/London
     volumes:
       - radarr-config:/config
-      - '/${project.STORAGE_PATH}/Media/Movies:/movies:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+      - '/$${project.STORAGE_PATH}/Media/Movies:/movies:rw'
+      - '/$${project.STORAGE_PATH}/Downloads:/downloads:rw'
     restart: unless-stopped
+
+volumes:
+  media-radarr-config: null

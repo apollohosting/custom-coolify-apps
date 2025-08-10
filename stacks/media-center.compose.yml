@@ -11,7 +11,7 @@ services:
       - JELLYFIN_PublishedServerUrl=$SERVICE_URL_JELLYFIN
     volumes:
       - jellyfin-config:/config
-      - '/${project.STORAGE_PATH}/Media:/data:rw'
+      - '/Data/Media:/data:rw'
     restart: unless-stopped
 
   sonarr:
@@ -23,8 +23,8 @@ services:
       - TZ=Europe/London
     volumes:
       - media-sonarr-config:/config
-      - '/${project.STORAGE_PATH}/Media/TV Shows:/tv:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+      - '/Data/Media/TV Shows:/tv:rw'
+      - '/Data/Downloads:/downloads:rw'
     restart: unless-stopped
 
   radarr:
@@ -36,8 +36,8 @@ services:
       - TZ=Europe/London
     volumes:
       - media-radarr-config:/config
-      - '/${project.STORAGE_PATH}/Media/Movies:/movies:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+      - '/Data/Media/Movies:/movies:rw'
+      - '/Data/Downloads:/downloads:rw'
     restart: unless-stopped
 
   lidarr:
@@ -49,8 +49,8 @@ services:
       - TZ=Europe/London
     volumes:
       - media-lidarr-config:/config:rw
-      - '/${project.STORAGE_PATH}/Media/Music:/music:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+      - '/Data/Media/Music:/music:rw'
+      - '/Data/Downloads:/downloads:rw'
     restart: unless-stopped
 
   filebrowser:
@@ -59,7 +59,7 @@ services:
     environment:
       - SERVICE_FQDN_FILEBROWSER_80
     volumes:
-      - '/$${project.STORAGE_PATH}/Media:/srv:rw'
+      - '/Data/Media:/srv:rw'
       - media-filebrowser-db:/database
       - media-filebrowser-config:/config
     restart: unless-stopped

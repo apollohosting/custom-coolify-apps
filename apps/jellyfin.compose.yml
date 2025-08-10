@@ -9,5 +9,9 @@ services:
       - JELLYFIN_PublishedServerUrl=$SERVICE_URL_JELLYFIN
     volumes:
       - jellyfin-config:/config
-      - '/${project.STORAGE_PATH}/Media:/data:rw'
+      - '/Data/Media:/data:rw'
     restart: unless-stopped
+
+
+volumes:
+  media-jellyfin-config: null

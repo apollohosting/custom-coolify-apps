@@ -9,6 +9,9 @@ services:
       - TZ=Europe/London
     volumes:
       - sonarr-config:/config
-      - '/${project.STORAGE_PATH}/Media/TV Shows:/tv:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+      - '/$${project.STORAGE_PATH}/Media/TV Shows:/tv:rw'
+      - '/$${project.STORAGE_PATH}/Downloads:/downloads:rw'
     restart: unless-stopped
+
+volumes:
+  media-sonarr-config: null

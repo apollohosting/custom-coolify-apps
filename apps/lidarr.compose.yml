@@ -9,6 +9,10 @@ services:
       - TZ=Europe/London
     volumes:
       - lidarr-config:/config:rw
-      - '/${project.STORAGE_PATH}/Media/Music:/music:rw'
-      - '/${project.STORAGE_PATH}/Downloads:/downloads:rw'
+      - '/Data/Media/Music:/music:rw'
+      - '/Data/Downloads:/downloads:rw'
     restart: unless-stopped
+
+
+volumes:
+  media-lidarr-config: null

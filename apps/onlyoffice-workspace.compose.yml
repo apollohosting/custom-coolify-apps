@@ -1,8 +1,11 @@
-# slogan: Onlyoffice Workspace is a feature rich office 360 alternative.
-
 # NOTE: Add $STORAGE_PATH to project before load.
 
 services:
+  # TODO: Add RabbitMQ
+ # AMQP_URI: The AMQP URI to connect to the message broker server.
+#REDIS_SERVER_HOST: The IP address or the name of the host where the Redis server is running.
+#REDIS_SERVER_PORT: The Redis server port number.
+
   mysql:
     container_name: onlyoffice-mysql
     image: mysql:latest
@@ -16,6 +19,21 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql:rw
 
+  redis:
+    container_name: onlyoffice-redis
+    image: redis:7
+    restart: always
+    volumes: 
+      - redis-data:/data
+
+  # rabbitmq:
+  #   container_name: onlyoffice-rabbitmq
+  #   image: rabbitmq:3
+  #   restart: always
+  #   expose:
+  #     - 5672
+  #   volumes:
+  #     - '/$${project.STORAGE_PATH}/logs/onlyoffice-rabbitmq:/var/log/rabbitmq:rw'
 
   community-server:
     container_name: onlyoffice-community-server
@@ -53,7 +71,7 @@ services:
       - community-letsencrypt:/etc/letsencrypt:rw
       - document-data:/var/www/onlyoffice/DocumentServerData:rw
       - community-certs:/var/www/onlyoffice/Data/certs:rw
-      - '/$${project.STORAGE_PATH}/logs/onlyoffice-community-server:/var/log/onlyoffice:rw'
+      - '/Data/logs/onlyoffice-community-server:/var/log/onlyoffice:rw'
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
 
 
@@ -77,10 +95,6 @@ services:
       - "ingest.geoip.downloader.enabled=false"  
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data:rw
-    # expose:
-    #   - "9200"
-    #   - "9300"
-
 
   document-server:
     container_name: onlyoffice-document-server
@@ -93,11 +107,13 @@ services:
       - JWT_ENABLED=true
       - JWT_SECRET=${SERVICE_BASE64_DOCUMENTSERVER}
       - JWT_HEADER=AuthorizationJwt
+      - REDIST_SERVER_HOST=onlyoffice-redis
+      # - AMQP_URI=amqp://guest:guest@host.docker.internal
     volumes:
       - document-data:/var/www/onlyoffice/Data:rw
       - document-custom-fonts:/usr/share/fonts/truetype/custom:rw
       - document-forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten:rw
-      - '/$${project.STORAGE_PATH}/logs/onlyoffice-document-server:/var/log/onlyoffice:rw'
+      - '/Data/logs/onlyoffice-document-server:/var/log/onlyoffice:rw'
 
 
   mail-server:
@@ -123,7 +139,7 @@ services:
     volumes:
       - mail-data:/var/vmail:rw
       - mail-certs:/etc/pki/tls/mailserver:rw
-      - '/$${project.STORAGE_PATH}/logs/mail:/var/log/onlyoffice:rw'
+      - '/Data/logs/mail:/var/log/onlyoffice:rw'
 
   control-panel:
     container_name: onlyoffice-control-panel
@@ -134,10 +150,13 @@ services:
     volumes:
       - controlpanel-data:/var/www/onlyoffice/Data:rw
       - /var/run/docker.sock:/var/run/docker.sock
-      - '/$${project.STORAGE_PATH}/logs/onlyoffice-control-panel:/var/log/onlyoffice:rw'
+      - '/Data/logs/onlyoffice-control-panel:/var/log/onlyoffice:rw'
     stdin_open: true
     tty: true
 
+networks:
+  onlyoffice:
+    driver: bridge
 
 volumes:
   mail-data: null
@@ -151,3 +170,5 @@ volumes:
   controlpanel-data: null
   mysql-data: null
   elasticsearch-data: null
+  redis-data: null
+  rabbitmq-data: null

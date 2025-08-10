@@ -5,7 +5,10 @@ services:
     environment:
       - SERVICE_FQDN_FILEBROWSER_80
     volumes:
-      - '/$${project.STORAGE_PATH}:/srv:rw'
+      - '/Data:/srv:rw'
       - filebrowser-db:/database
       - filebrowser-config:/config
     restart: unless-stopped
+
+volumes:
+  media-jellyfin-config: null
