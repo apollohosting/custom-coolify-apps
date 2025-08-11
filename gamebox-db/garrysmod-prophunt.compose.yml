@@ -1,0 +1,24 @@
+services:
+  gmod-prophunt:
+    image: ceifa/garrysmod:latest
+    environment:
+      - ARGS="+host_workshop_collection 3546526580"
+      - HOSTNAME="TC Prop Hunt"
+      - MAXPLAYERS="24"
+      - GAMEMODE="prophunt"
+      - MAP="gm_construct"
+    ports:
+      - 2002:27015/udp
+      - 2002:27015
+      - 2003:27005/udp
+    volumes:
+      - /Data/GameServers/Garrysmod-Prophunt/mounts:/home/gmod/mounts:rw
+      - /Data/GameServers/Garrysmod-Prophunt/garrysmod/addons:/home/gmod/server/garrysmod/addons:rw
+      - /Data/GameServers/Garrysmod-Prophunt/garrysmod/gamemodes:/home/gmod/server/garrysmod/gamemodes:rw
+      - /Data/GameServers/Garrysmod-Prophunt/garrysmod/cfg:/home/gmod/server/garrysmod/cfg:rw
+      - /Data/GameServers/Garrysmod-Prophunt/garrysmod/steam_cache:/home/gmod/server/garrysmod/steam_cache:rw
+      - /Data/GameServers/Garrysmod-Prophunt/garrysmod/cache:/home/gmod/server/garrysmod/cache:rw
+      - /Data/GameServers/Garrysmod-Prophunt/garrysmod/data:/home/gmod/server/garrysmod/data:rw
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

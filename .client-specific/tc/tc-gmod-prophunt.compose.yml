@@ -15,6 +15,7 @@ services:
       - /TC-Data/GameServers/TC-Prophunt/mounts:/home/gmod/mounts:rw
       - /TC-Data/GameServers/TC-Prophunt/garrysmod/addons:/home/gmod/server/garrysmod/addons:rw
       - /TC-Data/GameServers/TC-Prophunt/garrysmod/gamemodes:/home/gmod/server/garrysmod/gamemodes:rw
+      - /TC-Data/GameServers/TC-Prophunt/garrysmod/cfg:/home/gmod/server/garrysmod/cfg:rw
       - /TC-Data/GameServers/TC-Prophunt/garrysmod/steam_cache:/home/gmod/server/garrysmod/steam_cache:rw
       - /TC-Data/GameServers/TC-Prophunt/garrysmod/cache:/home/gmod/server/garrysmod/cache:rw
       - /TC-Data/GameServers/TC-Prophunt/garrysmod/data:/home/gmod/server/garrysmod/data:rw

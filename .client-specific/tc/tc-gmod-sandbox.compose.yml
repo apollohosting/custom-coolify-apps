@@ -15,6 +15,7 @@ services:
       - /TC-Data/GameServers/TC-Sandbox/mounts:/home/gmod/mounts:rw
       - /TC-Data/GameServers/TC-Sandbox/garrysmod/addons:/home/gmod/server/garrysmod/addons:rw
       - /TC-Data/GameServers/TC-Sandbox/garrysmod/gamemodes:/home/gmod/server/garrysmod/gamemodes:rw
+      - /TC-Data/GameServers/TC-Sandbox/garrysmod/cfg:/home/gmod/server/garrysmod/cfg:rw
       - /TC-Data/GameServers/TC-Sandbox/garrysmod/steam_cache:/home/gmod/server/garrysmod/steam_cache:rw
       - /TC-Data/GameServers/TC-Sandbox/garrysmod/cache:/home/gmod/server/garrysmod/cache:rw
       - /TC-Data/GameServers/TC-Sandbox/garrysmod/data:/home/gmod/server/garrysmod/data:rw
