@@ -1,5 +1,3 @@
-# Add $STORAGE_PATH to project before load.
-
 services:
   jellyfin:
     image: linuxserver/jellyfin:latest
@@ -11,7 +9,7 @@ services:
       - JELLYFIN_PublishedServerUrl=$SERVICE_URL_JELLYFIN
     volumes:
       - jellyfin-config:/config
-      - '/Data/Media:/data:rw'
+      - '/TC-Data/Media:/data:rw'
     restart: unless-stopped
 
   sonarr:
@@ -23,8 +21,8 @@ services:
       - TZ=Europe/London
     volumes:
       - media-sonarr-config:/config
-      - '/Data/Media/TV Shows:/tv:rw'
-      - '/Data/Downloads:/downloads:rw'
+      - '/TC-Data/Media/TV Shows:/tv:rw'
+      - '/TC-Data/Downloads:/downloads:rw'
     restart: unless-stopped
 
   radarr:
@@ -36,8 +34,8 @@ services:
       - TZ=Europe/London
     volumes:
       - media-radarr-config:/config
-      - '/Data/Media/Movies:/movies:rw'
-      - '/Data/Downloads:/downloads:rw'
+      - '/TC-Data/Media/Movies:/movies:rw'
+      - '/TC-Data/Downloads:/downloads:rw'
     restart: unless-stopped
 
   lidarr:
@@ -49,8 +47,8 @@ services:
       - TZ=Europe/London
     volumes:
       - media-lidarr-config:/config:rw
-      - '/Data/Media/Music:/music:rw'
-      - '/Data/Downloads:/downloads:rw'
+      - '/TC-Data/Media/Music:/music:rw'
+      - '/TC-Data/Downloads:/downloads:rw'
     restart: unless-stopped
 
   filebrowser:
@@ -59,7 +57,7 @@ services:
     environment:
       - SERVICE_FQDN_FILEBROWSER_80
     volumes:
-      - '/Data/Media:/srv:rw'
+      - '/TC-Data/Media:/srv:rw'
       - media-filebrowser-db:/database
       - media-filebrowser-config:/config
     restart: unless-stopped
