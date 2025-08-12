@@ -2,8 +2,6 @@ services:
   linuxgsm-gmod:
     image: 'gameservermanagers/gameserver:gmod'
     network_mode: host
-    # ports:
-    #   - 20001:20001
     volumes:
       - '/TC-Data/GameServers/Gmod-Sandbox:/data'
     restart: unless-stopped

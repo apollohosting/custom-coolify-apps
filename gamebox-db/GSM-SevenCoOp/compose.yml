@@ -1,0 +1,7 @@
+services:
+  linuxgsm-sven-coop:
+    image: gameservermanagers/gameserver:sven
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /Data/GameServers/sven-coop:/data

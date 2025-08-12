@@ -1,0 +1,7 @@
+services:
+  linuxgsm-csgo:
+    image: 'gameservermanagers/gameserver:csgo'
+    network_mode: host
+    volumes:
+      - '/TC-Data/GameServers/CSGO:/data'
+    restart: unless-stopped
