@@ -1,0 +1,7 @@
+services:
+  linuxgsm-mc:
+    image: gameservermanagers/gameserver:mc
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /Data/GameServers/Minecraft:/data
