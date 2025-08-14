@@ -4,4 +4,4 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - /Data/GameServers/Minecraft:/data
+      - /Gamebox-Data/GameServers/Minecraft:/data

@@ -3,5 +3,5 @@ services:
     image: 'gameservermanagers/gameserver:gmod'
     network_mode: host
     volumes:
-      - '/TC-Data/GameServers/Gmod-Sandbox:/data'
+      - '/Gamebox-Data/GameServers/Gmod-Sandbox:/data'
     restart: unless-stopped
