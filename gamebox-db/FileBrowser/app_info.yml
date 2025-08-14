@@ -1,0 +1,5 @@
+app-info:
+  name: "FileBrowser"
+  description: "Explore your server files from the web"
+  url: "https://filebrowser.org"
+  category: extra
